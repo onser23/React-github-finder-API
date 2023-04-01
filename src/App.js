@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Navbar from "./components/Navbar";
+import UserList from "./components/UserList";
+import Search from "./components/Search";
 
 function App() {
+  const [loading, setLoading] = useState(false);
+
+  const [users, setUsers] = useState([]);
+
+  async function searchUserHandler(keyword) {
+    try {
+      setLoading(true);
+
+      const usersData = await fetch(
+        "https://api.github.com/search/users?q=" + keyword
+      );
+      if (!usersData.ok) return;
+      const response = await usersData.json();
+      setUsers(response.items);
+      setLoading(false);
+    } catch (error) {}
+  }
+
+  const clearResultHandler = () => {
+    setUsers([]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <Search
+        searchUserHandler={searchUserHandler}
+        clearResultHandler={clearResultHandler}
+      />
+      <div className="container mt-3">
+        <UserList loading={loading} users={users} />
+      </div>
     </div>
   );
 }
