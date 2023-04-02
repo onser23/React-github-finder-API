@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-function Search({ searchUserHandler, clearResultHandler }) {
+function Search({
+  searchUserHandler,
+  clearResultHandler,
+  checkButton,
+  showAlert,
+}) {
   const [key, setKey] = useState("");
 
   const onChangeHandler = (e) => {
@@ -9,8 +14,12 @@ function Search({ searchUserHandler, clearResultHandler }) {
 
   const searchHandler = (e) => {
     e.preventDefault();
-    searchUserHandler(key);
-    setKey("");
+    if (key === "") {
+      showAlert("Please type a keyword", "danger");
+    } else {
+      searchUserHandler(key);
+      setKey("");
+    }
   };
 
   return (
@@ -31,7 +40,11 @@ function Search({ searchUserHandler, clearResultHandler }) {
       </form>
       <button
         onClick={clearResultHandler}
-        className="btn btn-outline-danger mt-3 btn-block"
+        className={
+          checkButton.length < 1
+            ? "btn-disabled"
+            : "btn btn-outline-danger mt-3 btn-block"
+        }
       >
         Clear Results
       </button>

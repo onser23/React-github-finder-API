@@ -4,6 +4,9 @@
 .btn-block {
     width: 100%;
 }
+.btn-disabled {
+    display: none;
+}
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap-icons/font/bootstrap-icons.scss';
 
